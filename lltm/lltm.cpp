@@ -104,7 +104,7 @@ std::vector<torch::Tensor> lltm_cuda_backward(
     torch::Tensor gate_weights,
     torch::Tensor weights);
 
-PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+PYBIND11_MODULE(lltm_ext, m) {
   m.def("forward_cuda", &lltm_cuda_forward, "LLTM forward (CUDA)");
   m.def("backward_cuda", &lltm_cuda_backward, "LLTM backward (CUDA)");
   m.def("forward", &lltm_forward, "LLTM forward");

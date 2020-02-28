@@ -1,17 +1,18 @@
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
-project(LLTM LANGUAGES CXX CUDA VERSION 1.0)
+cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+project(LLTM LANGUAGES C CXX CUDA VERSION 1.0)
+# if CUDA is optional: enable_language(CUDA)
 
 find_package(Torch REQUIRED)
-find_package(pybind11 REQUIRED)
+find_package(PythonExtensions REQUIRED)
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS})
 
-pybind11_add_module(lltm_ext
-    src/lltm.cpp
-    src/lltm_cuda.cpp
+add_library(lltm_ext MODULE
+    lltm/lltm.cpp
+    lltm/lltm_cuda.cu
 )
-
-# Required for pybind11 when building STATIC libraries.
-# It's ON by default with SHARED or MODULE libraries.
-set_property(TARGET lltm_ext PROPERTY POSITION_INDEPENDENT_CODE ON)
+python_extension_module(lltm_ext)
+target_link_libraries(lltm_ext ${TORCH_LIBRARIES})
+target_include_directories(lltm_ext PRIVATE ${TORCH_INCLUDE_DIRS})
+set_property(TARGET lltm_ext PROPERTY CXX_STANDARD 14)
 
 install(TARGETS lltm_ext DESTINATION lltm)
-install(FILES lltm/__init__.py DESTINATION lltm)

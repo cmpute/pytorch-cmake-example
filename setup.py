@@ -18,5 +18,5 @@ setup(
     description="a minimal example package for pytorch extension (with pybind11 and scikit-build)",
     license="MIT",
     packages=['lltm'],
-    cmake_args=[f'-DCMAKE_PREFIX_PATH={torch_root}']
+    cmake_args=[f'-DCMAKE_PREFIX_PATH={torch_root}'] # specify CUDA location: -DCMAKE_CUDA_COMPILER=...
 )
