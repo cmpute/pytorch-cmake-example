@@ -6,6 +6,12 @@ find_package(Torch REQUIRED)
 find_package(PythonExtensions REQUIRED)
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS})
 
+# tweak torch dependencies, see https://github.com/pytorch/pytorch/issues/33928
+get_target_property(TORCH_INTERFACE_LIB torch INTERFACE_LINK_LIBRARIES)
+string(REPLACE "/usr/local/cuda" ${CUDA_TOOLKIT_ROOT_DIR} TORCH_INTERFACE_LIB "${TORCH_INTERFACE_LIB}")
+set_target_properties(torch PROPERTIES INTERFACE_LINK_LIBRARIES ${TORCH_INTERFACE_LIB})
+
+# add library
 add_library(lltm_ext MODULE
     lltm/lltm.cpp
     lltm/lltm_cuda.cu
